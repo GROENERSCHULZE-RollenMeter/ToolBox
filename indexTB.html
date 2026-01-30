@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GSR Tool-Box | GRÖNER-SCHULZE GMBH</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --brand-navy: #0E1D3A;
+            --brand-cyan: #1DA1F2;
+            --bg-page: #f0f2f5;
+            --app-width: 360px;
+        }
+
+        html, body { 
+            height: 100%; margin: 0; padding: 0; background: var(--bg-page); 
+            font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+            display: flex; justify-content: center; align-items: center; 
+        }
+
+        .app-shell {
+            width: var(--app-width); min-width: var(--app-width); background: var(--brand-navy);
+            color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-radius: 30px;
+            overflow: hidden; display: flex; flex-direction: column; margin: 10px;
+        }
+
+        @media (max-width: 380px) { .app-shell { width: 100vw; min-width: 100vw; border-radius: 0; margin: 0; } }
+
+        .view { display: none; flex-direction: column; padding: 15px 20px; box-sizing: border-box; }
+        .view.active { display: flex; }
+
+        .top-nav { display: flex; justify-content: space-between; padding: 15px 20px 5px; gap: 8px; }
+        select { background: white; border: none; padding: 5px 8px; border-radius: 6px; font-weight: bold; color: var(--brand-navy); font-size: 0.7rem; outline: none; cursor: pointer; }
+
+        .logo-area { text-align: center; padding: 5px 0 10px; }
+        .logo-area img { max-width: 130px; height: auto; }
+        .logo-area h1 { font-size: 0.85rem; letter-spacing: 1.5px; margin: 5px 0; text-transform: uppercase; font-weight: 800; }
+
+        .card { background: white; border-radius: 15px; padding: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; transition: 0.2s; }
+        .card:active { transform: scale(0.96); }
+        .icon { width: 38px; height: 38px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .card-text h2 { margin: 0; font-size: 0.9rem; }
+        .card-text p { margin: 0; font-size: 0.65rem; color: #64748b; }
+
+        .back-btn { color: white; display: flex; align-items: center; gap: 4px; cursor: pointer; padding-bottom: 5px; font-weight: bold; font-size: 0.75rem; }
+        .input-box { margin-bottom: 10px; }
+        .label { font-size: 0.6rem; color: var(--brand-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 0.95rem; font-weight: bold; color: var(--brand-navy); box-sizing: border-box; }
+
+        .res-card { background: white; padding: 15px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
+        .res-num { font-size: 2rem; font-weight: 900; color: var(--brand-cyan); display: block; }
+        .res-info { font-size: 0.6rem; color: #718096; font-weight: bold; display: block; }
+
+        .bt-btn {
+            background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 12px; 
+            font-size: 0.65rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 6px; 
+            cursor: pointer; width: 100%; margin-bottom: 15px; text-transform: uppercase;
+        }
+        .bt-btn:active { background: var(--brand-cyan); }
+        .bt-btn svg { width: 14px; height: 14px; }
+
+        footer { text-align: center; padding: 10px 20px 20px; font-size: 0.6rem; color: #94a3b8; line-height: 1.3; }
+        footer strong { color: white; display: block; margin-bottom: 2px; }
+        footer a { color: var(--brand-cyan); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="top-nav">
+        <select id="uG" onchange="updateAllUnits()"><option value="mm">mm</option><option value="inc">inch</option></select>
+        <select id="lG" onchange="changeLang()">
+            <option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option>
+            <option value="es">ES</option><option value="it">IT</option><option value="nl">NL/BE</option>
+            <option value="pl">PL</option><option value="ru">RU</option><option value="hu">HU</option>
+            <option value="dk">DK</option><option value="no">NO</option><option value="cz">CZ</option>
+            <option value="jp">JP</option>
+        </select>
+    </div>
+
+    <div id="main" class="view active">
+        <div class="logo-area"><img src="GS-Logo.jpg" alt="Logo"><h1 id="t-main-h">Service-Tools</h1></div>
+        <div class="menu-list">
+            <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 id="t-m-r-h">Rollen-Meter</h2><p id="t-m-r-p">Längen berechnen</p></div></div>
+            <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 id="t-m-n-h">Nutzen-Optimierer</h2><p id="t-m-n-p">Schnittpläne</p></div></div>
+            <div class="card" onclick="go('led')"><div class="icon"><i data-lucide="lightbulb"></i></div><div class="card-text"><h2 id="t-m-l-h">LED-Profi</h2><p id="t-m-l-p">Abstände & Ausleuchtung</p></div></div>
+        </div>
+        <footer id="footer-content"></footer>
+    </div>
+
+    <div id="view-rollen" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
+        <div class="logo-area"><h1 id="t-r-h">Rollen-Meter</h1></div>
+        
+        <button class="bt-btn" onclick="btConnect()">
+            <i data-lucide="bluetooth"></i> 
+            <span id="t-bt">BT-Messschieber verbinden</span>
+        </button>
+
+        <div class="input-box"><span id="t-r-D" class="label">Rollendurchmesser</span><input type="number" id="rD" oninput="calcR()"></div>
+        <div class="input-box"><span id="t-r-d" class="label">Kerndurchmesser</span><input type="number" id="rd" value="76" oninput="calcR()"></div>
+        <div class="input-box"><span id="t-r-s" class="label">Stärke (mm)</span><input type="number" id="rs" value="0.15" step="0.01" oninput="calcR()"></div>
+        <div class="res-card"><span id="resR" class="res-num">0.00 m</span></div>
+        <footer class="footer-copy"></footer>
+    </div>
+
+    <div id="view-led" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
+        <div class="logo-area"><h1 id="t-l-h">LED-Rechner</h1></div>
+        <div class="input-box"><span id="t-l-z" class="label">Kastentiefe (Z)</span><input type="number" id="lz" value="100" oninput="calcL()"></div>
+        <div class="input-box"><span id="t-l-a" class="label">Abstrahlwinkel (°)</span><input type="number" id="la" value="160" oninput="calcL()"></div>
+        <div class="res-card">
+            <span id="t-l-res-l" class="res-info">MAX. MODUL-ABSTAND</span>
+            <span id="resL" class="res-num">0.0 mm</span>
+        </div>
+        <footer class="footer-copy"></footer>
+    </div>
+
+    <div id="view-nutzen" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
+        <div class="logo-area"><h1 id="t-n-h">Nutzen-Rechner</h1></div>
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <div style="flex:1;"><span id="t-n-pw" class="label">Platte B</span><input type="number" id="pW" value="3000" oninput="calcN()"></div>
+            <div style="flex:1;"><span id="t-n-ph" class="label">Platte H</span><input type="number" id="pH" value="1500" oninput="calcN()"></div>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <div style="flex:1;"><span id="t-n-sw" class="label">Schild B</span><input type="number" id="sW" oninput="calcN()"></div>
+            <div style="flex:1;"><span id="t-n-sh" class="label">Schild H</span><input type="number" id="sH" oninput="calcN()"></div>
+        </div>
+        <div class="res-card"><span id="resN" class="res-num">0</span><span id="resE" class="res-info">Effizienz: 0%</span></div>
+        <footer class="footer-copy"></footer>
+    </div>
+</div>
+
+<script>
+    const i18n = {
+        de: { back: "ZURÜCK", mainH: "Service-Tools", m_r_h: "Rollen-Meter", m_r_p: "Längen berechnen", m_n_h: "Nutzen-Optimierer", m_n_p: "Schnittpläne", m_l_h: "LED-Profi", m_l_p: "Abstände & Ausleuchtung", l_h: "LED-Rechner", l_z: "Kastentiefe (Z)", l_a: "Winkel (°)", l_res: "MAX. MODUL-ABSTAND", r_h: "Rollen-Meter", r_D: "Rollendurchmesser", r_d: "Kerndurchmesser", r_s: "Stärke (mm)", n_h: "Nutzen-Rechner", n_pw: "Platte B", n_ph: "Platte H", n_sw: "Schild B", n_sh: "Schild H", bt: "BT-Messschieber verbinden" },
+        en: { back: "BACK", mainH: "Service Tools", m_r_h: "Roll Meter", m_r_p: "Calculate length", m_n_h: "Layout Optimizer", m_n_p: "Cutting plans", m_l_h: "LED Pro", m_l_p: "Spacing & Lighting", l_h: "LED Calculator", l_z: "Box Depth (Z)", l_a: "Angle (°)", l_res: "MAX. SPACING", r_h: "Roll Meter", r_D: "Roll Diameter", r_d: "Core Diameter", r_s: "Thickness", n_h: "Layout Calculator", n_pw: "Sheet W", n_ph: "Sheet H", n_sw: "Sign W", n_sh: "Sign H", bt: "Connect BT Caliper" },
+        nl: { back: "TERUG", mainH: "Service Tools", m_r_h: "Rol Meter", m_r_p: "Lengte berekenen", m_n_h: "Layout Optimizer", m_n_p: "Snijschema's", m_l_h: "LED Pro", m_l_p: "Afstand & Verlichting", l_h: "LED Calculator", l_z: "Kastdiepte (Z)", l_a: "Hoek (°)", l_res: "MAX. AFSTAND", r_h: "Rol Meter", r_D: "Roldiameter", r_d: "Kerndiameter", r_s: "Dikte", n_h: "Layout Calculator", n_pw: "Plaat B", n_ph: "Plaat H", n_sw: "Bord B", n_sh: "Bord H", bt: "BT-Schuifmaat verbinden" },
+        pl: { back: "POWRÓT", mainH: "Narzędzia", m_r_h: "Licznik rolek", m_r_p: "Oblicz długość", m_n_h: "Optymalizator", m_n_p: "Plany cięcia", m_l_h: "LED Pro", m_l_p: "Odstępy", l_h: "Kalkulator LED", l_z: "Głębokość (Z)", l_a: "Kąt (°)", l_res: "MAKS. ROZSTAW", r_h: "Licznik rolek", r_D: "Średnica rolki", r_d: "Średnica rdzenia", r_s: "Grubość", n_h: "Kalkulator układu", n_pw: "Płyta Š", n_ph: "Płyta V", n_sw: "Szyld Š", n_sh: "Szyld V", bt: "Połącz suwmiarkę BT" },
+        ru: { back: "НАЗАД", mainH: "Инструменты", m_r_h: "Расчет рулона", m_r_p: "Рассчитать длину", m_n_h: "Оптимизатор", m_n_p: "Раскрой", m_l_h: "LED Профи", m_l_p: "Свет", l_h: "LED Калькулятор", l_z: "Глубина (Z)", l_a: "Угол (°)", l_res: "МАКС. РАССТОЯНИЕ", r_h: "Расчет рулона", r_D: "Диаметр рулона", r_d: "Диаметр втулки", r_s: "Толщина", n_h: "Калькулятор раскроя", n_pw: "Лист Ш.", n_ph: "Лист В.", n_sw: "Вывеска Ш.", n_sh: "Вывеска В.", bt: "Подключить штангенциркуль BT" },
+        cz: { back: "ZPĚT", mainH: "Nástroje", m_r_h: "Měřič rolí", m_r_p: "Vypočítat délku", m_n_h: "Optimalizátor", m_n_p: "Plány řezání", m_l_h: "LED Profi", m_l_p: "Osvětlení", l_h: "LED kalkulačka", l_z: "Hloubka (Z)", l_a: "Úhel (°)", l_res: "MAX. ROZESTUP", r_h: "Měřič rolí", r_D: "Průměr role", r_d: "Průměr jádra", r_s: "Tloušťka", n_h: "Kalkulačka řezů", n_pw: "Deska Š", n_ph: "Deska V", n_sw: "Štítek Š", n_sh: "Štítek V", bt: "Připojit BT posuvné měřítko" },
+        it: { back: "INDIETRO", mainH: "Strumenti", m_r_h: "Metro a Rullo", m_r_p: "Calcola lunghezza", m_n_h: "Ottimizzatore", m_n_p: "Piani taglio", m_l_h: "LED Pro", m_l_p: "Luce", l_h: "Calcolatore LED", l_z: "Profondità (Z)", l_a: "Angolo (°)", l_res: "SPAZIATURA MAX.", r_h: "Metro a Rullo", r_D: "Diametro rullo", r_d: "Diametro anima", r_s: "Spessore", n_h: "Calcolo tagli", n_pw: "Lastra L", n_ph: "Lastra A", n_sw: "Insegna L", n_sh: "Insegna A", bt: "Connetti calibro BT" },
+        fr: { back: "RETOUR", mainH: "Outils", m_r_h: "Mètre de Rouleau", m_r_p: "Calculer longueur", m_n_h: "Optimiseur", m_n_p: "Plans de coupe", m_l_h: "LED Pro", m_l_p: "Éclairage", l_h: "Calculateur LED", l_z: "Profondeur (Z)", l_a: "Angle (°)", l_res: "ESPACEMENT MAX.", r_h: "Mètre de Rouleau", r_D: "Diamètre rouleau", r_d: "Diamètre noyau", r_s: "Épaisseur", n_h: "Calculateur", n_pw: "Plaque L", n_ph: "Plaque H", n_sw: "Signe L", n_sh: "Signe H", bt: "Connecter pied à coulisse BT" },
+        es: { back: "VOLVER", mainH: "Herramientas", m_r_h: "Metro de Rollo", m_r_p: "Calcular longitud", m_n_h: "Optimizador", m_n_p: "Planes de corte", m_l_h: "LED Pro", m_l_p: "Iluminación", l_h: "Calculadora LED", l_z: "Profundidad (Z)", l_a: "Ángulo (°)", l_res: "ESPACIO MÁX.", r_h: "Metro de Rollo", r_D: "Diámetro rollo", r_d: "Diámetro núcleo", r_s: "Espesor", n_h: "Calculadora cortes", n_pw: "Placa Ancho", n_ph: "Placa Alto", n_sw: "Cartel Ancho", n_sh: "Cartel Alto", bt: "Conectar calibre BT" },
+        hu: { back: "VISSZA", mainH: "Eszközök", m_r_h: "Tekercs-Méter", m_r_p: "Hossz számítása", m_n_h: "Optimalizáló", m_n_p: "Vágási tervek", m_l_h: "LED Profi", m_l_p: "Világítás", l_h: "LED Kalkulátor", l_z: "Mélység (Z)", l_a: "Szög (°)", l_res: "MAX. TÁVOLSÁG", r_h: "Tekercs-Méter", r_D: "Tekercs átmérő", r_d: "Mag átmérő", r_s: "Vastagság", n_h: "Vágás kalkulátor", n_pw: "Tábla Sz.", n_ph: "Tábla M.", n_sw: "Tábla Sz.", n_sh: "Tábla M.", bt: "BT-Tolómérő csatlakoztatása" },
+        dk: { back: "TILBAGE", mainH: "Værktøj", m_r_h: "Rullemåler", m_r_p: "Beregn længde", m_n_h: "Optimering", m_n_p: "Skæreplaner", m_l_h: "LED Profi", m_l_p: "Belysning", l_h: "LED Lommeregner", l_z: "Kassedybde (Z)", l_a: "Vinkel (°)", l_res: "MAKS. AFSTAND", r_h: "Rullemåler", r_D: "Rullediameter", r_d: "Kernediameter", r_s: "Tykkelse", n_h: "Beregner", n_pw: "Plade B", n_ph: "Plade H", n_sw: "Skilt B", n_sh: "Skilt H", bt: "Tilslut BT-skydelære" },
+        no: { back: "TILBAKE", mainH: "Verktøy", m_r_h: "Rullemåler", m_r_p: "Beregn lengde", m_n_h: "Optimalisering", m_n_p: "Kutteplaner", m_l_h: "LED Pro", m_l_p: "Belysning", l_h: "LED-kalkulator", l_z: "Kassedybde (Z)", l_a: "Vinkel (°)", l_res: "MAKS. AVSTAND", r_h: "Rullemåler", r_D: "Rullediameter", r_d: "Kjernediameter", r_s: "Tykkelse", n_h: "Kutte-kalkulator", n_pw: "Plate B", n_ph: "Plate H", n_sw: "Skilt B", n_sh: "Skilt H", bt: "Koble til BT-skyvelære" },
+        jp: { back: "戻る", mainH: "サービスツール", m_r_h: "ロールメーター", m_r_p: "長さを計算", m_n_h: "レイアウト最適化", m_n_p: "カットプラン", m_l_h: "LEDプロ", m_l_p: "間隔と照明", l_h: "LED計算機", l_z: "深さ (Z)", l_a: "照射角 (°)", l_res: "最大モジュール間隔", r_h: "ロールメーター", r_D: "ロール直径", r_d: "コア直径", r_s: "材料の厚さ", n_h: "レイアウト計算", n_pw: "シート幅", n_ph: "シート高さ", n_sw: "サイン幅", n_sh: "サイン高さ", bt: "BTノギスを接続する" }
+    };
+
+    function changeLang() {
+        const l = document.getElementById('lG').value;
+        const t = i18n[l] || i18n.de;
+        document.getElementById('t-bt').innerText = t.bt;
+        document.getElementById('t-main-h').innerText = t.mainH;
+        document.getElementById('t-m-r-h').innerText = t.m_r_h; document.getElementById('t-m-r-p').innerText = t.m_r_p;
+        document.getElementById('t-m-n-h').innerText = t.m_n_h; document.getElementById('t-m-n-p').innerText = t.m_n_p;
+        document.getElementById('t-m-l-h').innerText = t.m_l_h; document.getElementById('t-m-l-p').innerText = t.m_l_p;
+        document.getElementById('t-l-h').innerText = t.l_h; document.getElementById('t-l-z').innerText = t.l_z;
+        document.getElementById('t-l-a').innerText = t.l_a; document.getElementById('t-l-res-l').innerText = t.l_res;
+        document.getElementById('t-r-h').innerText = t.r_h; document.getElementById('t-r-D').innerText = t.r_D;
+        document.getElementById('t-r-d').innerText = t.r_d; document.getElementById('t-r-s').innerText = t.r_s;
+        document.getElementById('t-n-h').innerText = t.n_h; document.getElementById('t-n-pw').innerText = t.n_pw;
+        document.getElementById('t-n-ph').innerText = t.n_ph; document.getElementById('t-n-sw').innerText = t.n_sw;
+        document.getElementById('t-n-sh').innerText = t.n_sh;
+        document.querySelectorAll('.t-back').forEach(e => e.innerText = t.back);
+        calcAll();
+    }
+
+    function btConnect() { alert(i18n[document.getElementById('lG').value].bt + "..."); }
+    function go(v) { document.querySelectorAll('.view').forEach(e => e.classList.remove('active')); document.getElementById(v === 'main' ? 'main' : 'view-' + v).classList.add('active'); lucide.createIcons(); }
+    function calcL() { let z = parseFloat(document.getElementById('lz').value), a = parseFloat(document.getElementById('la').value); if(z && a) document.getElementById('resL').innerText = (2 * z * Math.tan((a/2) * (Math.PI/180)) * 0.6).toFixed(1) + " " + document.getElementById('uG').value; }
+    function calcR() { let D = parseFloat(document.getElementById('rD').value), d = parseFloat(document.getElementById('rd').value), s = parseFloat(document.getElementById('rs').value); if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D,2)-Math.pow(d,2)))/(4000*s)).toFixed(2) + " m"; }
+    function calcN() { let pW = parseFloat(document.getElementById('pW').value), pH = parseFloat(document.getElementById('pH').value), sW = parseFloat(document.getElementById('sW').value), sH = parseFloat(document.getElementById('sH').value); if(pW && pH && sW && sH) { let n1 = Math.floor(pW/sW) * Math.floor(pH/sH), n2 = Math.floor(pW/sH) * Math.floor(pH/sW), best = Math.max(n1, n2); document.getElementById('resN').innerText = best; document.getElementById('resE').innerText = "Effizienz: " + ((best*sW*sH)/(pW*pH)*100).toFixed(1) + "%"; } }
+    function calcAll() { calcL(); calcR(); calcN(); }
+    function updateAllUnits() { calcAll(); }
+    
+    const footerHtml = `<strong>GRÖNER-SCHULZE GMBH</strong>V2.0 | Update: 30.01.2026<br><div style="margin-top:5px"><a href="https://www.groener-schulze.com/impressum" target="_blank">Impressum</a> | <a href="https://www.groener-schulze.com/datenschutzbestimmungen" target="_blank">Datenschutz</a></div>`;
+    function setFooters() { document.getElementById('footer-content').innerHTML = footerHtml; document.querySelectorAll('.footer-copy').forEach(f => f.innerHTML = footerHtml); }
+    
+    setFooters(); changeLang(); lucide.createIcons();
+</script>
+</body>
+</html>
