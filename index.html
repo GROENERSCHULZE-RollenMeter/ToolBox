@@ -15,7 +15,7 @@
 
         html, body { 
             height: 100%; margin: 0; padding: 0; background: var(--bg-page); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
             display: flex; justify-content: center; align-items: center; 
         }
 
@@ -38,53 +38,59 @@
         .logo-area img { max-width: 130px; height: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .logo-area h1 { font-size: 0.85rem; letter-spacing: 1.5px; margin: 5px 0; text-transform: uppercase; font-weight: 800; }
 
-        .card { background: white; border-radius: 15px; padding: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; transition: 0.2s; }
-        .card:active { transform: scale(0.96); }
+        .card { background: white; border-radius: 15px; padding: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; }
         .icon { width: 38px; height: 38px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        
+        .card-text h2 { margin: 0; font-size: 0.9rem; }
+        .card-text p { margin: 0; font-size: 0.65rem; color: #64748b; }
+
+        /* Easter Egg Overlay */
+        #easter-egg-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(14, 29, 58, 0.98); /* Brand Navy */
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 999; text-align: center; padding: 20px; box-sizing: border-box;
+            border-radius: 30px;
+        }
+
+        .egg-line-white { color: white; font-weight: 400; font-size: 1rem; text-transform: uppercase; }
+        .egg-line-cyan { color: var(--brand-cyan); font-weight: 900; font-size: 1.4rem; text-transform: uppercase; margin: 10px 0; text-shadow: 0 0 15px rgba(29, 161, 242, 0.4); }
+        .egg-line-bold-white { color: white; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        .back-btn { color: white; display: flex; align-items: center; gap: 4px; cursor: pointer; padding-bottom: 5px; font-weight: bold; font-size: 0.75rem; }
+        .input-box { margin-bottom: 10px; }
+        .label { font-size: 0.6rem; color: var(--brand-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 0.95rem; font-weight: bold; color: var(--brand-navy); box-sizing: border-box; }
+
+        .res-card { background: white; padding: 15px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
+        .res-num { font-size: 2rem; font-weight: 900; color: var(--brand-cyan); display: block; }
+        .res-info { font-size: 0.6rem; color: #718096; font-weight: bold; display: block; }
+
         .bt-btn {
             background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 12px; 
             font-size: 0.65rem; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 6px; 
             cursor: pointer; width: 100%; margin-bottom: 15px; text-transform: uppercase;
         }
 
-        .res-card { background: white; padding: 15px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
-        .res-num { font-size: 2rem; font-weight: 900; color: var(--brand-cyan); display: block; }
-
-        /* Easter Egg Styling */
-        #easter-egg-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(14, 29, 58, 0.95);
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 999; text-align: center; padding: 20px; box-sizing: border-box;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .egg-text {
-            color: #FFD700; /* Gold */
-            font-weight: 900; font-size: 1.2rem; text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            margin-bottom: 10px;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-
         footer { text-align: center; padding: 10px 20px 20px; font-size: 0.6rem; color: #94a3b8; }
+        footer strong { color: white; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
     <div id="easter-egg-overlay">
-        <div class="egg-text">Powerd by<br>Werbedruck-GM<br>DER MEISTER</div>
-        <div style="font-size: 2.5rem;">🏆</div>
+        <div class="egg-line-white">Powerd by</div>
+        <div class="egg-line-cyan">Werbedruck-GM</div>
+        <div class="egg-line-bold-white">DER MEISTER</div>
     </div>
 
     <div class="top-nav">
-        <select id="uG" onchange="calcAll()"><option value="mm">mm</option><option value="inc">inch</option></select>
+        <select id="uG" onchange="updateAllUnits()"><option value="mm">mm</option><option value="inc">inch</option></select>
         <select id="lG" onchange="changeLang()">
             <option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option>
+            <option value="es">ES</option><option value="it">IT</option><option value="nl">NL/BE</option>
+            <option value="pl">PL</option><option value="ru">RU</option><option value="hu">HU</option>
+            <option value="dk">DK</option><option value="no">NO</option><option value="cz">CZ</option>
             <option value="jp">JP</option>
         </select>
     </div>
@@ -95,15 +101,15 @@
             <h1 id="t-main-h">Werbetechniker-Tools</h1>
         </div>
         <div class="menu-list">
-            <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2>Rollen-Meter</h2><p>Restmeter berechnen</p></div></div>
-            <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2>Nutzen-Optimierer</h2><p>Verschnitt minimieren</p></div></div>
-            <div class="card" onclick="go('led')"><div class="icon"><i data-lucide="lightbulb"></i></div><div class="card-text"><h2>LED-Profi</h2><p>Abstände & Ausleuchtung</p></div></div>
+            <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 id="t-m-r-h">Rollen-Meter</h2><p id="t-m-r-p">Restmeter berechnen</p></div></div>
+            <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 id="t-m-n-h">Nutzen-Optimierer</h2><p id="t-m-n-p">Schnittpläne</p></div></div>
+            <div class="card" onclick="go('led')"><div class="icon"><i data-lucide="lightbulb"></i></div><div class="card-text"><h2 id="t-m-l-h">LED-Profi</h2><p id="t-m-l-p">Abstände & Ausleuchtung</p></div></div>
         </div>
         <footer id="footer-content"></footer>
     </div>
 
     <div id="view-rollen" class="view">
-        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span>ZURÜCK</span></div>
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
         <div class="logo-area"><h1>Rollen-Meter</h1></div>
         <button class="bt-btn" onclick="btConnect()"><i data-lucide="bluetooth"></i> <span id="t-bt">BT-Messschieber verbinden</span></button>
         <div class="input-box"><span class="label">Rollendurchmesser</span><input type="number" id="rD" oninput="calcR()"></div>
@@ -113,67 +119,64 @@
     </div>
 
     <div id="view-led" class="view">
-        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span>ZURÜCK</span></div>
-        <div class="logo-area"><h1>LED-Profi</h1></div>
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
+        <div class="logo-area"><h1>LED-Rechner</h1></div>
+        <div class="input-box"><span class="label">Kastentiefe (Z)</span><input type="number" id="lz" value="100" oninput="calcL()"></div>
+        <div class="input-box"><span class="label">Abstrahlwinkel (°)</span><input type="number" id="la" value="160" oninput="calcL()"></div>
+        <div class="res-card"><span class="res-info">MAX. MODUL-ABSTAND</span><span id="resL" class="res-num">0.0 mm</span></div>
+    </div>
+
+    <div id="view-nutzen" class="view">
+        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
+        <div class="logo-area"><h1>Nutzen-Rechner</h1></div>
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <div style="flex:1;"><span class="label">Platte B</span><input type="number" id="pW" value="3000" oninput="calcN()"></div>
+            <div style="flex:1;"><span class="label">Platte H</span><input type="number" id="pH" value="1500" oninput="calcN()"></div>
         </div>
+        <div class="res-card"><span id="resN" class="res-num">0</span></div>
+    </div>
 </div>
 
 <script>
     // Easter Egg Logik
     let clicks = 0;
-    let timer;
+    let clickTimer;
     document.getElementById('logo-click').addEventListener('click', () => {
         clicks++;
-        clearTimeout(timer);
+        clearTimeout(clickTimer);
         if (clicks === 5) {
             const overlay = document.getElementById('easter-egg-overlay');
             overlay.style.display = 'flex';
-            
-            // Nach 3 Sekunden (3000ms) ausblenden
-            setTimeout(() => {
-                overlay.style.animation = 'fadeOut 0.5s ease forwards';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    overlay.style.animation = 'fadeIn 0.4s ease';
-                }, 500);
-            }, 3000);
-            
+            setTimeout(() => { overlay.style.display = 'none'; }, 3000);
             clicks = 0;
         }
-        timer = setTimeout(() => { clicks = 0; }, 1000);
+        clickTimer = setTimeout(() => { clicks = 0; }, 1000);
     });
 
     const i18n = {
-        de: { mainH: "Werbetechniker-Tools", bt: "BT-Messschieber verbinden" },
-        en: { mainH: "Signmaker Tools", bt: "Connect BT Caliper" },
-        fr: { mainH: "Outils de Signalétique", bt: "Connecter Pied à Coulisse BT" },
-        jp: { mainH: "看板製作ツール", bt: "BTノギスを接続する" }
+        de: { mainH: "Werbetechniker-Tools", bt: "BT-Messschieber verbinden", back: "ZURÜCK" },
+        en: { mainH: "Signmaker Tools", bt: "Connect BT Caliper", back: "BACK" }
     };
 
     function changeLang() {
         const l = document.getElementById('lG').value;
-        document.getElementById('t-main-h').innerText = i18n[l].mainH;
-        document.getElementById('t-bt').innerText = i18n[l].bt;
+        const t = i18n[l] || i18n.de;
+        document.getElementById('t-main-h').innerText = t.mainH;
+        document.getElementById('t-bt').innerText = t.bt;
+        document.querySelectorAll('.t-back').forEach(e => e.innerText = t.back);
     }
 
-    function go(v) { 
-        document.querySelectorAll('.view').forEach(e => e.classList.remove('active')); 
-        document.getElementById(v === 'main' ? 'main' : 'view-' + v).classList.add('active'); 
-        lucide.createIcons(); 
-    }
+    function go(v) { document.querySelectorAll('.view').forEach(e => e.classList.remove('active')); document.getElementById(v === 'main' ? 'main' : 'view-' + v).classList.add('active'); lucide.createIcons(); }
+    function calcR() { let D = parseFloat(document.getElementById('rD').value), d = parseFloat(document.getElementById('rd').value), s = parseFloat(document.getElementById('rs').value); if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D,2)-Math.pow(d,2)))/(4000*s)).toFixed(2) + " m"; }
+    function calcL() { let z = parseFloat(document.getElementById('lz').value), a = parseFloat(document.getElementById('la').value); if(z && a) document.getElementById('resL').innerText = (2 * z * Math.tan((a/2) * (Math.PI/180)) * 0.6).toFixed(1) + " mm"; }
+    function calcN() { /* Nutzen Logik */ }
+    function updateAllUnits() { calcR(); calcL(); }
+    function btConnect() { alert("Suche Gerät..."); }
 
-    function calcR() {
-        let D = parseFloat(document.getElementById('rD').value), 
-            d = parseFloat(document.getElementById('rd').value), 
-            s = parseFloat(document.getElementById('rs').value);
-        if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D,2)-Math.pow(d,2)))/(4000*s)).toFixed(2) + " m";
-    }
-
-    function btConnect() { alert("Suche BT-Gerät..."); }
-
-    document.getElementById('footer-content').innerHTML = `<strong>GRÖNER-SCHULZE GMBH</strong>V2.0.1 | © 2026`;
+    const footerHtml = `<strong>GRÖNER-SCHULZE GMBH</strong>V2.0.1 | 30.01.2026`;
+    document.getElementById('footer-content').innerHTML = footerHtml;
     
-    lucide.createIcons();
+    changeLang(); lucide.createIcons();
 </script>
 </body>
 </html>
