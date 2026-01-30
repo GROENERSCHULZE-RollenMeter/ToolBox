@@ -38,12 +38,7 @@
         .logo-area img { max-width: 130px; height: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
         .logo-area h1 { font-size: 0.85rem; letter-spacing: 1.5px; margin: 5px 0; text-transform: uppercase; font-weight: 800; }
 
-        .card { background: white; border-radius: 15px; padding: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; }
-        .icon { width: 38px; height: 38px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .card-text h2 { margin: 0; font-size: 0.9rem; }
-        .card-text p { margin: 0; font-size: 0.65rem; color: #64748b; }
-
-        /* Easter Egg Overlay */
+        /* Easter Egg Overlay Styling */
         #easter-egg-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(14, 29, 58, 0.98); /* Brand Navy */
@@ -51,10 +46,14 @@
             z-index: 999; text-align: center; padding: 20px; box-sizing: border-box;
             border-radius: 30px;
         }
-
         .egg-line-white { color: white; font-weight: 400; font-size: 1rem; text-transform: uppercase; }
-        .egg-line-cyan { color: var(--brand-cyan); font-weight: 900; font-size: 1.4rem; text-transform: uppercase; margin: 10px 0; text-shadow: 0 0 15px rgba(29, 161, 242, 0.4); }
+        .egg-line-cyan { color: var(--brand-cyan); font-weight: 900; font-size: 1.4rem; text-transform: uppercase; margin: 10px 0; }
         .egg-line-bold-white { color: white; font-weight: 800; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
+
+        .card { background: white; border-radius: 15px; padding: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--brand-navy); margin-bottom: 8px; }
+        .icon { width: 38px; height: 38px; background: var(--brand-navy); color: var(--brand-cyan); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .card-text h2 { margin: 0; font-size: 0.9rem; }
+        .card-text p { margin: 0; font-size: 0.65rem; color: #64748b; }
 
         .back-btn { color: white; display: flex; align-items: center; gap: 4px; cursor: pointer; padding-bottom: 5px; font-weight: bold; font-size: 0.75rem; }
         .input-box { margin-bottom: 10px; }
@@ -63,7 +62,6 @@
 
         .res-card { background: white; padding: 15px; border-radius: 18px; text-align: center; margin: 8px 0; color: var(--brand-navy); }
         .res-num { font-size: 2rem; font-weight: 900; color: var(--brand-cyan); display: block; }
-        .res-info { font-size: 0.6rem; color: #718096; font-weight: bold; display: block; }
 
         .bt-btn {
             background: #2563eb; color: white; border: none; padding: 8px 12px; border-radius: 12px; 
@@ -88,22 +86,19 @@
         <select id="uG" onchange="updateAllUnits()"><option value="mm">mm</option><option value="inc">inch</option></select>
         <select id="lG" onchange="changeLang()">
             <option value="de">DE</option><option value="en">EN</option><option value="fr">FR</option>
-            <option value="es">ES</option><option value="it">IT</option><option value="nl">NL/BE</option>
-            <option value="pl">PL</option><option value="ru">RU</option><option value="hu">HU</option>
-            <option value="dk">DK</option><option value="no">NO</option><option value="cz">CZ</option>
             <option value="jp">JP</option>
         </select>
     </div>
 
     <div id="main" class="view active">
         <div class="logo-area">
-            <img src="GS-Logo.jpg" alt="Logo" id="logo-click">
+            <img src="GS-Logo.jpg" alt="Logo" id="logo-trigger">
             <h1 id="t-main-h">Werbetechniker-Tools</h1>
         </div>
         <div class="menu-list">
-            <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2 id="t-m-r-h">Rollen-Meter</h2><p id="t-m-r-p">Restmeter berechnen</p></div></div>
-            <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2 id="t-m-n-h">Nutzen-Optimierer</h2><p id="t-m-n-p">Schnittpläne</p></div></div>
-            <div class="card" onclick="go('led')"><div class="icon"><i data-lucide="lightbulb"></i></div><div class="card-text"><h2 id="t-m-l-h">LED-Profi</h2><p id="t-m-l-p">Abstände & Ausleuchtung</p></div></div>
+            <div class="card" onclick="go('rollen')"><div class="icon"><i data-lucide="ruler"></i></div><div class="card-text"><h2>Rollen-Meter</h2><p>Restmeter berechnen</p></div></div>
+            <div class="card" onclick="go('nutzen')"><div class="icon"><i data-lucide="layout-grid"></i></div><div class="card-text"><h2>Nutzen-Optimierer</h2><p>Schnittpläne</p></div></div>
+            <div class="card" onclick="go('led')"><div class="icon"><i data-lucide="lightbulb"></i></div><div class="card-text"><h2>LED-Profi</h2><p>Abstände & Ausleuchtung</p></div></div>
         </div>
         <footer id="footer-content"></footer>
     </div>
@@ -117,39 +112,29 @@
         <div class="input-box"><span class="label">Stärke (mm)</span><input type="number" id="rs" value="0.15" step="0.01" oninput="calcR()"></div>
         <div class="res-card"><span id="resR" class="res-num">0.00 m</span></div>
     </div>
-
-    <div id="view-led" class="view">
-        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
-        <div class="logo-area"><h1>LED-Rechner</h1></div>
-        <div class="input-box"><span class="label">Kastentiefe (Z)</span><input type="number" id="lz" value="100" oninput="calcL()"></div>
-        <div class="input-box"><span class="label">Abstrahlwinkel (°)</span><input type="number" id="la" value="160" oninput="calcL()"></div>
-        <div class="res-card"><span class="res-info">MAX. MODUL-ABSTAND</span><span id="resL" class="res-num">0.0 mm</span></div>
-    </div>
-
-    <div id="view-nutzen" class="view">
-        <div class="back-btn" onclick="go('main')"><i data-lucide="chevron-left"></i> <span class="t-back">ZURÜCK</span></div>
-        <div class="logo-area"><h1>Nutzen-Rechner</h1></div>
-        <div style="display:flex; gap:8px; margin-bottom:8px;">
-            <div style="flex:1;"><span class="label">Platte B</span><input type="number" id="pW" value="3000" oninput="calcN()"></div>
-            <div style="flex:1;"><span class="label">Platte H</span><input type="number" id="pH" value="1500" oninput="calcN()"></div>
-        </div>
-        <div class="res-card"><span id="resN" class="res-num">0</span></div>
-    </div>
 </div>
 
 <script>
-    // Easter Egg Logik
+    // --- EASTER EGG LOGIK ---
     let clicks = 0;
     let clickTimer;
-    document.getElementById('logo-click').addEventListener('click', () => {
+    document.getElementById('logo-trigger').addEventListener('click', () => {
         clicks++;
         clearTimeout(clickTimer);
+        
         if (clicks === 5) {
             const overlay = document.getElementById('easter-egg-overlay');
             overlay.style.display = 'flex';
-            setTimeout(() => { overlay.style.display = 'none'; }, 3000);
+            
+            // Nach 3 Sekunden automatisch schließen
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 3000);
+            
             clicks = 0;
         }
+        
+        // Zähler zurücksetzen, wenn Klicks zu langsam sind (1 Sekunde Pause)
         clickTimer = setTimeout(() => { clicks = 0; }, 1000);
     });
 
@@ -168,10 +153,8 @@
 
     function go(v) { document.querySelectorAll('.view').forEach(e => e.classList.remove('active')); document.getElementById(v === 'main' ? 'main' : 'view-' + v).classList.add('active'); lucide.createIcons(); }
     function calcR() { let D = parseFloat(document.getElementById('rD').value), d = parseFloat(document.getElementById('rd').value), s = parseFloat(document.getElementById('rs').value); if(D && d && s) document.getElementById('resR').innerText = ((Math.PI * (Math.pow(D,2)-Math.pow(d,2)))/(4000*s)).toFixed(2) + " m"; }
-    function calcL() { let z = parseFloat(document.getElementById('lz').value), a = parseFloat(document.getElementById('la').value); if(z && a) document.getElementById('resL').innerText = (2 * z * Math.tan((a/2) * (Math.PI/180)) * 0.6).toFixed(1) + " mm"; }
-    function calcN() { /* Nutzen Logik */ }
-    function updateAllUnits() { calcR(); calcL(); }
     function btConnect() { alert("Suche Gerät..."); }
+    function updateAllUnits() { calcR(); }
 
     const footerHtml = `<strong>GRÖNER-SCHULZE GMBH</strong>V2.0.1 | 30.01.2026`;
     document.getElementById('footer-content').innerHTML = footerHtml;
